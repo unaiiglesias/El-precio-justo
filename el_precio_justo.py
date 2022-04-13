@@ -91,8 +91,8 @@ def ask_and_check_user_guess(product_name, product_image_link, session):
 
 
 def set_round_number():
-    print("Cuantas rondas te gustaría jugar?")
-    say("Cuantas rondas te gustaría jugar?")
+    print("Cuantas rondas te gustaría jugar? Debe de ser un numero impar.")
+    say("Cuantas rondas te gustaría jugar? Debe de ser un numero impar")
     numbers_in_words = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"]
 
     user_input = listen()
@@ -103,11 +103,17 @@ def set_round_number():
 
     try:
         number_of_rounds = int(user_input)
-        print(number_of_rounds)
-        return number_of_rounds
     except (ValueError, AttributeError, TypeError):
         say("Lo siento, no te he entendido")
         return set_round_number()
+
+    if (number_of_rounds % 2) == 0: # El numero es par
+        say(str(number_of_rounds) + " no es un numero impar")
+        return set_round_number()
+
+    print("La partida durará {} rondas.".format(number_of_rounds))
+    say("La partida durará {} rondas.".format(number_of_rounds))
+    return number_of_rounds
 
 
 def determine_winner(P1_guess, P2_guess, product_price):
