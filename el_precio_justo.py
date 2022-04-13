@@ -141,13 +141,16 @@ def determine_winner(P1_guess, P2_guess, product_price):
 
     if P1_absolute_error < P2_absolute_error:
         P1_Wins += 1
+        os.system("cls")
         print_round_winner("jugador 1")
         say("El primer jugador se ha acercado más. Se ha quedado a {} euros".format(P1_absolute_error))
     elif P1_absolute_error > P2_absolute_error:
         P2_Wins += 1
+        os.system("cls")
         print_round_winner("jugador 2")
         say("El segundo jugador se ha acercado más. Se ha quedado a {} euros".format(P2_absolute_error))
     else:  # If both errors are the same
+        os.system("cls")
         say("Ambos jugadores se han quedado igual de cerca. Se elegirá un ganador aleatorio.")
         pick_random_winner()
     rounds_played += 1
@@ -162,17 +165,19 @@ def print_title():
     return
 
 
-def print_round_counter(rounds_played, number_of_rounds):
+def print_round_counter_and_scoreboard(rounds_played, number_of_rounds):
+    global P1_Wins
+    global P2_Wins
     content = "Ronda " + str(rounds_played + 1) + " / " + str(number_of_rounds)
+    scoreboard = "J1 {} --- {} J2".format(P1_Wins, P2_Wins)
     print("+" + "-" * len(content) + "+")
-    print("|" + content + "|")
+    print("|" + content + "|" + "    " + scoreboard)
     print("+" + "-" * len(content) + "+")
     return
 
 
 def print_round_winner(round_winner):
     content = "El " + round_winner + " ha ganado esta ronda"
-    print()
     print("+" + "-" * len(content) + "+")
     print("|" + content + "|")
     print("+" + "-" * len(content) + "+")
@@ -181,8 +186,9 @@ def print_round_winner(round_winner):
 
 def print_winner(winner):
     content = "Ha ganado el " + winner + " ¡Felicidades!"
+    scoreboard = "J1 {} --- {} J2".format(P1_Wins, P2_Wins)
     print("+" + "-" * len(content) + "+")
-    print("|" + content + "|")
+    print("|" + content + "|" + "    " + scoreboard)
     print("+" + "-" * len(content) + "+")
     return
 
@@ -208,7 +214,7 @@ def main():
     while rounds_played < number_of_rounds:
         os.system("cls")
 
-        print_round_counter(rounds_played, number_of_rounds)
+        print_round_counter_and_scoreboard(rounds_played, number_of_rounds)
 
         category_link = get_random_category_link(all_categories)
         product_name, product_price, product_image_link = proccess_products(session, category_link)
@@ -235,6 +241,7 @@ def main():
         os.system("cls")
 
     print_winner(winner)
+
 
     say("Ha ganado el {}. ¡Felicidades!".format(winner))
     os.system("pause")
