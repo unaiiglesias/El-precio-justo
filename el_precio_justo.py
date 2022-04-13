@@ -13,7 +13,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # Global variables
 P1_Wins = 0
 P2_Wins = 0
-Rounds_played = 0
+rounds_played = 0
 
 
 def get_categories(session):
@@ -91,12 +91,15 @@ def ask_and_check_user_guess(product_name, product_image_link, session):
 
 
 def set_round_number():
+    print("Cuantas rondas te gustaría jugar?")
     say("Cuantas rondas te gustaría jugar?")
     numbers_in_words = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"]
 
     user_input = listen()
     if user_input in numbers_in_words:
         user_input = numbers_in_words.index(user_input)
+    elif user_input == "una":
+        user_input = 1
 
     try:
         number_of_rounds = int(user_input)
@@ -104,18 +107,22 @@ def set_round_number():
         return number_of_rounds
     except ValueError:
         say("Lo siento, no te he entendido")
-        set_round_number()
+        return set_round_number()
     except AttributeError:
         say("Lo siento, no te he entendido")
-        set_round_number()
+        return set_round_number()
+    except TypeError:
+        say("Lo siento, no te he entendido")
+        return set_round_number()
 
 
 def determine_winner(P1_guess, P2_guess, product_price):
     global P1_Wins
     global P2_Wins
+    global rounds_played
 
-    P1_absolute_error = abs(P1_guess - product_price)
-    P2_absolute_error = abs(P2_guess - product_price)
+    P1_absolute_error = round(abs(P1_guess - product_price), 2)
+    P2_absolute_error = round(abs(P2_guess - product_price), 2)
 
     if P1_absolute_error < P2_absolute_error:
         P1_Wins += 1
@@ -128,6 +135,16 @@ def determine_winner(P1_guess, P2_guess, product_price):
             P1_Wins += 1
         else:
             P2_Wins += 1
+    rounds_played += 1
+    return
+
+
+def print_title():
+    title = "EL PRECIO JUSTO by Unai Iglesias"
+    print("+" + "-" * len(title) + "+")
+    print("|" + title + "|")
+    print("+" + "-" * len(title) + "+")
+    return
 
 
 def print_winner(winner):
@@ -140,9 +157,13 @@ def print_winner(winner):
 
 def main():
     # Initialization
+    global P1_Wins
+    global P2_Wins
+    global rounds_played
+    os.system("cls")
     session = requests_html.HTMLSession()
     winner = None
-
+    print_title()
     say("Bienvenidos a El precio justo, vamos a adivinar el precio de algunos productos")
 
     all_categories = get_categories(session)
@@ -169,15 +190,17 @@ def main():
 
         if P1_Wins == number_of_rounds:
             winner = "primer jugador"
+            os.system("cls")
         elif P2_Wins == number_of_rounds:
             winner = "segundo jugador"
+            os.system("cls")
         else:
             say("Siguiente ronda.")
 
     print_winner(winner)
 
     say("Ha ganado el {}. ¡Felicidades!".format(winner))
-
+    os.system("pause")
 
 if __name__ == "__main__":
     main()
