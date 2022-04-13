@@ -105,13 +105,7 @@ def set_round_number():
         number_of_rounds = int(user_input)
         print(number_of_rounds)
         return number_of_rounds
-    except ValueError:
-        say("Lo siento, no te he entendido")
-        return set_round_number()
-    except AttributeError:
-        say("Lo siento, no te he entendido")
-        return set_round_number()
-    except TypeError:
+    except (ValueError, AttributeError, TypeError):
         say("Lo siento, no te he entendido")
         return set_round_number()
 
