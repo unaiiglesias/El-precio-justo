@@ -116,6 +116,21 @@ def set_round_number():
     return number_of_rounds
 
 
+def pick_random_winner():
+    global P1_Wins
+    global P2_Wins
+
+    if random.randint(1, 2) == 1:
+        P1_Wins += 1
+        print_round_winner("jugador 1")
+        say("La ronda la gana el jugador 1.")
+    else:
+        P2_Wins += 1
+        print_round_winner("jugador 2")
+        say("La ronda la gana el jugador 2.")
+    return
+
+
 def determine_winner(P1_guess, P2_guess, product_price):
     global P1_Wins
     global P2_Wins
@@ -126,15 +141,15 @@ def determine_winner(P1_guess, P2_guess, product_price):
 
     if P1_absolute_error < P2_absolute_error:
         P1_Wins += 1
-        say("El primer jugador se ha acercado a {} euros.".format(P1_absolute_error))
+        print_round_winner("jugador 1")
+        say("El primer jugador se ha acercado más. Se ha quedado a {} euros".format(P1_absolute_error))
     elif P1_absolute_error > P2_absolute_error:
         P2_Wins += 1
-        say("El segundo jugador se ha acercado a {} euros.".format(P2_absolute_error))
+        print_round_winner("jugador 2")
+        say("El segundo jugador se ha acercado más. Se ha quedado a {} euros".format(P2_absolute_error))
     else:  # If both errors are the same
-        if random.randint(1,2) == 1:
-            P1_Wins += 1
-        else:
-            P2_Wins += 1
+        say("Ambos jugadores se han quedado igual de cerca. Se elegirá un ganador aleatorio.")
+        pick_random_winner()
     rounds_played += 1
     return
 
@@ -144,6 +159,23 @@ def print_title():
     print("+" + "-" * len(title) + "+")
     print("|" + title + "|")
     print("+" + "-" * len(title) + "+")
+    return
+
+
+def print_round_counter(rounds_played, number_of_rounds):
+    content = "Ronda " + str(rounds_played + 1) + " / " + str(number_of_rounds)
+    print("+" + "-" * len(content) + "+")
+    print("|" + content + "|")
+    print("+" + "-" * len(content) + "+")
+    return
+
+
+def print_round_winner(round_winner):
+    content = "El " + round_winner + " ha ganado esta ronda"
+    print()
+    print("+" + "-" * len(content) + "+")
+    print("|" + content + "|")
+    print("+" + "-" * len(content) + "+")
     return
 
 
@@ -173,8 +205,11 @@ def main():
     # End of initialization
 
     # Main game loop
-    while (P1_Wins < number_of_rounds) and (P2_Wins < number_of_rounds):
+    while rounds_played < number_of_rounds:
         os.system("cls")
+
+        print_round_counter(rounds_played, number_of_rounds)
+
         category_link = get_random_category_link(all_categories)
         product_name, product_price, product_image_link = proccess_products(session, category_link)
 
@@ -188,14 +223,16 @@ def main():
 
         determine_winner(P1_guess, P2_guess, product_price)
 
-        if P1_Wins == number_of_rounds:
-            winner = "primer jugador"
-            os.system("cls")
-        elif P2_Wins == number_of_rounds:
-            winner = "segundo jugador"
-            os.system("cls")
-        else:
+        if rounds_played != number_of_rounds:
             say("Siguiente ronda.")
+
+
+    if P1_Wins > P2_Wins:
+        winner = "primer jugador"
+        os.system("cls")
+    elif P2_Wins > P1_Wins:
+        winner = "segundo jugador"
+        os.system("cls")
 
     print_winner(winner)
 
