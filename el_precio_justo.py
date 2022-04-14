@@ -107,7 +107,7 @@ def set_round_number():
         say("Lo siento, no te he entendido")
         return set_round_number()
 
-    if (number_of_rounds % 2) == 0: # El numero es par
+    if (number_of_rounds % 2) == 0:  # El numero es par
         say(str(number_of_rounds) + " no es un numero impar")
         return set_round_number()
 
