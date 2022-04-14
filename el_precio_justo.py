@@ -178,8 +178,9 @@ def print_round_counter_and_scoreboard(rounds_played, number_of_rounds):
 
 def print_round_winner(round_winner):
     content = "El " + round_winner + " ha ganado esta ronda"
+    scoreboard = "J1 {} --- {} J2".format(P1_Wins, P2_Wins)
     print("+" + "-" * len(content) + "+")
-    print("|" + content + "|")
+    print("|" + content + "|" + "    " + scoreboard)
     print("+" + "-" * len(content) + "+")
     return
 

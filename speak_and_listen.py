@@ -5,7 +5,12 @@ import speech_recognition as sr
 engine = pyttsx3.init()
 engine.setProperty("rate", 170)
 engine.setProperty("voice", "spanish")
-
+# IDK why but sometimes that doesn't work, so:
+try:
+    voices = engine.getProperty("voices")
+    engine.setProperty("voice", voices[1].id)
+except Exception:
+    pass
 r = sr.Recognizer()
 
 
@@ -35,4 +40,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
