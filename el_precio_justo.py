@@ -96,6 +96,8 @@ def set_round_number():
     numbers_in_words = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"]
 
     user_input = listen()
+    user_input = user_input.split(" ")[0] # In case input ~= 5 rondas
+
     if user_input in numbers_in_words:
         user_input = numbers_in_words.index(user_input)
     elif user_input == "una":
