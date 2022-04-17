@@ -11,8 +11,8 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Global variables
-P1_Wins = 0
-P2_Wins = 0
+p1_Wins = 0
+p2_Wins = 0
 rounds_played = 0
 
 
@@ -82,12 +82,12 @@ def ask_and_check_user_guess(product_name, product_image_link, session):
     say("El nombre del producto es {}".format(product_name))
 
     say("¿Cuanto vale? Jugador 1")
-    P1_guess = listen_and_get_user_guess()
+    p1_guess = listen_and_get_user_guess()
 
     say("¿Cuanto vale? Jugador 2")
-    P2_guess = listen_and_get_user_guess()
+    p2_guess = listen_and_get_user_guess()
 
-    return P1_guess, P2_guess
+    return p1_guess, p2_guess
 
 
 def set_round_number():
@@ -96,7 +96,7 @@ def set_round_number():
     numbers_in_words = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"]
 
     user_input = listen()
-    user_input = user_input.split(" ")[0] # In case input ~= 5 rondas
+    user_input = user_input.split(" ")[0]  # In case input ~= 5 rondas
 
     if user_input in numbers_in_words:
         user_input = numbers_in_words.index(user_input)
@@ -119,38 +119,38 @@ def set_round_number():
 
 
 def pick_random_winner():
-    global P1_Wins
-    global P2_Wins
+    global p1_Wins
+    global p2_Wins
 
     if random.randint(1, 2) == 1:
-        P1_Wins += 1
+        p1_Wins += 1
         print_round_winner("jugador 1")
         say("La ronda la gana el jugador 1.")
     else:
-        P2_Wins += 1
+        p2_Wins += 1
         print_round_winner("jugador 2")
         say("La ronda la gana el jugador 2.")
     return
 
 
-def determine_winner(P1_guess, P2_guess, product_price):
-    global P1_Wins
-    global P2_Wins
+def determine_winner(p1_guess, p2_guess, product_price):
+    global p1_Wins
+    global p2_Wins
     global rounds_played
 
-    P1_absolute_error = round(abs(P1_guess - product_price), 2)
-    P2_absolute_error = round(abs(P2_guess - product_price), 2)
+    p1_absolute_error = round(abs(p1_guess - product_price), 2)
+    p2_absolute_error = round(abs(p2_guess - product_price), 2)
 
-    if P1_absolute_error < P2_absolute_error:
-        P1_Wins += 1
+    if p1_absolute_error < p2_absolute_error:
+        p1_Wins += 1
         os.system("cls")
         print_round_winner("jugador 1")
-        say("El primer jugador se ha acercado más. Se ha quedado a {} euros".format(P1_absolute_error))
-    elif P1_absolute_error > P2_absolute_error:
-        P2_Wins += 1
+        say("El primer jugador se ha acercado más. Se ha quedado a {} euros".format(p1_absolute_error))
+    elif p1_absolute_error > p2_absolute_error:
+        p2_Wins += 1
         os.system("cls")
         print_round_winner("jugador 2")
-        say("El segundo jugador se ha acercado más. Se ha quedado a {} euros".format(P2_absolute_error))
+        say("El segundo jugador se ha acercado más. Se ha quedado a {} euros".format(p2_absolute_error))
     else:  # If both errors are the same
         os.system("cls")
         say("Ambos jugadores se han quedado igual de cerca. Se elegirá un ganador aleatorio.")
@@ -167,11 +167,12 @@ def print_title():
     return
 
 
-def print_round_counter_and_scoreboard(rounds_played, number_of_rounds):
-    global P1_Wins
-    global P2_Wins
+def print_round_counter_and_scoreboard(number_of_rounds):
+    global p1_Wins
+    global p2_Wins
+    global rounds_played
     content = "Ronda " + str(rounds_played + 1) + " / " + str(number_of_rounds)
-    scoreboard = "J1 {} --- {} J2".format(P1_Wins, P2_Wins)
+    scoreboard = "J1 {} --- {} J2".format(p1_Wins, p2_Wins)
     print("+" + "-" * len(content) + "+")
     print("|" + content + "|" + "    " + scoreboard)
     print("+" + "-" * len(content) + "+")
@@ -180,7 +181,7 @@ def print_round_counter_and_scoreboard(rounds_played, number_of_rounds):
 
 def print_round_winner(round_winner):
     content = "El " + round_winner + " ha ganado esta ronda"
-    scoreboard = "J1 {} --- {} J2".format(P1_Wins, P2_Wins)
+    scoreboard = "J1 {} --- {} J2".format(p1_Wins, p2_Wins)
     print("+" + "-" * len(content) + "+")
     print("|" + content + "|" + "    " + scoreboard)
     print("+" + "-" * len(content) + "+")
@@ -189,7 +190,7 @@ def print_round_winner(round_winner):
 
 def print_winner(winner):
     content = "Ha ganado el " + winner + " ¡Felicidades!"
-    scoreboard = "J1 {} --- {} J2".format(P1_Wins, P2_Wins)
+    scoreboard = "J1 {} --- {} J2".format(p1_Wins, p2_Wins)
     print("+" + "-" * len(content) + "+")
     print("|" + content + "|" + "    " + scoreboard)
     print("+" + "-" * len(content) + "+")
@@ -198,8 +199,8 @@ def print_winner(winner):
 
 def main():
     # Initialization
-    global P1_Wins
-    global P2_Wins
+    global p1_Wins
+    global p2_Wins
     global rounds_played
     os.system("cls")
     session = requests_html.HTMLSession()
@@ -217,34 +218,32 @@ def main():
     while rounds_played < number_of_rounds:
         os.system("cls")
 
-        print_round_counter_and_scoreboard(rounds_played, number_of_rounds)
+        print_round_counter_and_scoreboard(number_of_rounds)
 
         category_link = get_random_category_link(all_categories)
         product_name, product_price, product_image_link = proccess_products(session, category_link)
 
         # Ask for guesses
-        P1_guess, P2_guess = ask_and_check_user_guess(product_name, product_image_link, session)
+        p1_guess, p2_guess = ask_and_check_user_guess(product_name, product_image_link, session)
 
         # Reveal real product price
         product_price_adapted_to_speech = str(round(product_price, 2)).replace(".", "coma")
         say("El precio era {} euros".format(product_price_adapted_to_speech))
         print("El precio era {} €.".format(round(product_price, 2)))
 
-        determine_winner(P1_guess, P2_guess, product_price)
+        determine_winner(p1_guess, p2_guess, product_price)
 
         if rounds_played != number_of_rounds:
             say("Siguiente ronda.")
 
-
-    if P1_Wins > P2_Wins:
+    if p1_Wins > p2_Wins:
         winner = "primer jugador"
         os.system("cls")
-    elif P2_Wins > P1_Wins:
+    elif p2_Wins > p1_Wins:
         winner = "segundo jugador"
         os.system("cls")
 
     print_winner(winner)
-
 
     say("Ha ganado el {}. ¡Felicidades!".format(winner))
     os.system("pause")
