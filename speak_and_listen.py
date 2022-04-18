@@ -4,12 +4,10 @@ import speech_recognition as sr
 
 engine = pyttsx3.init()
 engine.setProperty("rate", 170)
-engine.setProperty("voice", "spanish")
-# IDK why but sometimes that doesn't work, so:
 
 voices = engine.getProperty("voices")
 
-voice_to_get_index = 1  # Default value
+voice_to_get_index = 0  # Default value
 
 for voice_number in voices:
     if voice_number.id == 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_ES-ES_HELENA_11.0':
