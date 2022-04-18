@@ -21,6 +21,36 @@ def get_categories(session):
     return site_home.html.find(".subfamilyheadertittle")
 
 
+def let_user_choose_category():
+    category_dict = {"coolpc": 'https://www.coolmod.com/pcs-coolmod/',
+                     "portátiles": 'https://www.coolmod.com/pcs-tablets-portatiles-portatiles/',
+                     "PCs sobremesa": 'https://www.coolmod.com/pcs-tablets-portatiles-pcs-sobremesa/',
+                     "componentes PC": 'https://www.coolmod.com/componentes-hardware-componentes-pc/'}
+
+    say("Para esta primera ronda, puedes elegir categoría.")
+
+    keys = []
+    values = []
+    for key, value in category_dict.items():
+        keys.append(key)
+        values.append(value)
+
+    chosen_category_link = None
+    while not chosen_category_link:
+        os.system("cls")
+        print("Categorías a elegir:\n" + ("\n".join(keys)) + "\n")  # Pendiente de arreglar
+        user_input = listen()
+
+        if user_input in keys:
+            chosen_category = keys[keys.index(user_input)]
+            say("Has elegido la categoria " + chosen_category)
+            chosen_category_link = category_dict[chosen_category]
+            os.system("cls")
+            return chosen_category_link
+        else:
+            say("Lo siento, no te he entendido, repite tu elección por favor.")
+
+
 def get_random_category_link(all_categories):
     category = random.choice(all_categories)
 
@@ -96,7 +126,11 @@ def set_round_number():
     numbers_in_words = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"]
 
     user_input = listen()
-    user_input = user_input.split(" ")[0]  # In case input ~= 5 rondas
+    try:
+        user_input = user_input.split(" ")[0]  # In case input ~= 5 rondas
+    except AttributeError:
+        say("Lo siento, no te he entendido")
+        return set_round_number()
 
     if user_input in numbers_in_words:
         user_input = numbers_in_words.index(user_input)
@@ -218,9 +252,13 @@ def main():
     while rounds_played < number_of_rounds:
         os.system("cls")
 
+        if rounds_played == 0:  # User will choose category for the first round
+            category_link = let_user_choose_category()
+        else:
+            category_link = get_random_category_link(all_categories)
+
         print_round_counter_and_scoreboard(number_of_rounds)
 
-        category_link = get_random_category_link(all_categories)
         product_name, product_price, product_image_link = proccess_products(session, category_link)
 
         # Ask for guesses
