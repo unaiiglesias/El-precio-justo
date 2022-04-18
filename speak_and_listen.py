@@ -6,11 +6,17 @@ engine = pyttsx3.init()
 engine.setProperty("rate", 170)
 engine.setProperty("voice", "spanish")
 # IDK why but sometimes that doesn't work, so:
-try:
-    voices = engine.getProperty("voices")
-    engine.setProperty("voice", voices[1].id)
-except Exception:
-    pass
+
+voices = engine.getProperty("voices")
+
+voice_to_get_index = 1  # Default value
+
+for voice_number in voices:
+    if voice_number.id == 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_ES-ES_HELENA_11.0':
+        voice_to_get_index = voices.index(voice_number)
+
+engine.setProperty("voice", voices[voice_to_get_index].id)
+
 r = sr.Recognizer()
 
 

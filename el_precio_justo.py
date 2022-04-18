@@ -43,7 +43,7 @@ def let_user_choose_category():
 
         if user_input in keys:
             chosen_category = keys[keys.index(user_input)]
-            say("Has elegido la categoria " + chosen_category)
+            say("Has elegido la categoría " + chosen_category)
             chosen_category_link = category_dict[chosen_category]
             os.system("cls")
             return chosen_category_link
