@@ -289,11 +289,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-"""
-- 5 rondas
-- Hacer que el juego sea de dos jugadores
-- Dejar al usuario escoger categoria (Diccionario)
-- Arreglar sistema de rondas
-"""
